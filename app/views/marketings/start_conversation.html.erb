@@ -1,0 +1,109 @@
+<div class="max-w-6xl mx-auto py-8 px-2 text-xs">
+  <div class="bg-white border" style="height: calc(100vh - 7em)">
+    <div class="flex w-full h-full">
+      <aside class="w-1/4 border-r overflow-y-hidden">
+        <header class="px-4 border-b flex justify-center" style="min-height: 65px; height: 65px; z-index: 5;">
+          <div class="flex justify-between items-center w-full">
+            <div>All conversations</div>
+            <div class="underline">Search</div>
+          </div>
+        </header>
+        <div class="overflow-y-scroll w-full overflow-x-hidden" style="flex: 1; height: calc(100% - 65px)">
+          <div class="bg-green-100 p-4 border-b">
+            <div class="flex items-start">
+              <img src="<%= @recipient.avatar %>" alt="" class="object-cover w-10 h-10 rounded-full border">
+              <div class="pl-2" style="flex: 1">
+                <div class="flex justify-between mb-1">
+                  <div class="font-semibold"><%= @recipient.username %></div>
+                  <div class="font-light text-gray-600 text-xs">1 month</div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <div class="font-light text-gray-600">OK :) Waiting for yo...</div>
+                  <div class="text-green-400 font-bold"><small>online</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <main style="flex: 1">
+        <header class="border-b px-4" style="min-height: 65px; height: 65px; z-index: 5;">
+          <div class="flex items-center h-full">
+            <div>
+              <div class="text-xl font-bold"><%= @recipient.username %> <span class="text-green-400 ml-1 text-sm"><small>online</small></span></div>
+              <div class="text-gray-600 flex">
+                <div>Last seen 22h ago</div>
+                <div class="mx-2">-</div>
+                <div>Local time Nov 18, 9:31AM</div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="flex flex-col" style="height: calc(100% - 65px);">
+          <div class="text-center justify-center flex flex-col h-full -mt-24">
+            <p class="text-lg mb-2">Say 👋 to <%= @recipient.username %></p>
+            <%= form_with model: ChatRoom.new, method: :post, url: create_chat_room_path(user_slug: params[:user_slug]) do |f| %>
+              <%= f.submit "Start a conversation", class: "font-bold text-white py-1 px-3 rounded border text-md bg-green-500 hover:bg-green-700 cursor-pointer", data: {disable_with: "Creating..."}  %>
+            <% end %>
+          </div>
+        </div>
+      </main>
+      <aside class="hidden lg:block w-1/4 border-l">
+        <header class="p-4">
+          <div class="text-lg font-bold">About</div>
+          <article class="my-10">
+            <div class="flex flex-col items-center text-center">
+              <div class="mb-3">
+                <div class="flex justify-center">
+                  <img src="<%= @recipient.avatar %>" alt="" class="object-cover w-16 h-16 rounded-full border">
+                </div>
+                <p class="mt-1 text-sm font-bold mb-2"><%= @recipient.username %></p>
+                <p class="my-1"><span class="bg-purple-600 text-white text-center py-1 px-2 shadow rounded">Business</span></p>
+              </div>
+              <div class="flex justify-between items-center w-full my-1 text-sm">
+                <div class="text-gray-700">Reviews</div>
+                <div class="text-gray-700 font-semibold">⭐️4.5 <span class="text-gray-500 font-light">(4)</span></div>
+              </div>
+              <div class="flex justify-between items-center w-full my-1 text-sm">
+                <div class="text-gray-700">Industry</div>
+                <div class="text-gray-700 font-semibold">Services</div>
+              </div>
+              <div class="flex justify-between items-center w-full my-1 text-sm">
+                <div class="text-gray-700">Specialty</div>
+                <div class="text-gray-700 font-semibold">Accounting</div>
+              </div>
+              <div class="flex justify-between items-center w-full my-1 text-sm">
+                <div class="text-gray-700">Company</div>
+                <div class="text-gray-700 font-semibold underline text-blue-500 hover:text-blue-700 cursor-pointer">More info</div>
+              </div>
+            </div>
+          </article>
+        </header>
+      </aside>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
+  element_to_scroll_to.scrollIntoView();
+</script>
+
+<!-- <div id="chat-box" class="flex flex-col overflow-y-hidden" style="height: calc(100% - 65px - 75px)">
+  <section id="messages" class="overflow-y-scroll w-full overflow-x-hidden py-4" >
+    <div class="flex items-start py-4 px-4 hover:bg-orange-100">
+      <img src="https://fiverr-res.cloudinary.com/t_profile_original,q_auto,f_auto/attachments/profile/photo/eb3f192b5bd31acee0e594723ebfc43b-1603220229894/04d5c994-1902-45d0-9579-9a2a3c411a83.jpg" alt="" class="mt-1 object-cover w-8 h-8 rounded-full">
+      <div class="pl-2" style="flex: 1">
+        <div><strong class="text-sm">oktagnico</strong><span class="pl-2 text-gray-600">Oct 16, 12:30 PM</span></div>
+        <div class="text-sm text-gray-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae necessitatibus accusantium officia perferendis quasi repellat voluptas modi cum fugiat ipsum quam facilis quae suscipit doloremque similique temporibus nulla, at a.</div>
+      </div>
+    </div>
+  </section>
+  <section id="message-input" style="min-height: 65px; height: 65px; z-index: 5;">
+    <div class="px-4">
+      <input type="text" class="w-100">
+    </div>
+  </section>
+</div>
+ -->

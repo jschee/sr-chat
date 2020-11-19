@@ -1,0 +1,15 @@
+<div class="max-w-6xl mx-auto py-8 px-2 text-xs">
+  <div class="grid grid-cols-4 gap-3">
+    <% @users.each do |u| %>
+      <div class="border bg-white p-4 text-center flex flex-col items-center">
+        <img src="<%= u.avatar %>" alt="" class="object-cover w-12 h-12 rounded-full border bg-white">
+        <p class="font-bold my-2"><%= u.username %></p>
+        <% if already_connected?(u) %>
+          <%= link_to "Go to inbox", chat_path(chat_slug: @chat_room.slug), class: "text-blue-500 hover:text-blue-700 underline cursor-pointer" %>
+        <% else %>
+          <%= link_to "Get connected", start_conversation_path(user_slug: u.slug), class: "text-blue-500 hover:text-blue-700 underline cursor-pointer" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

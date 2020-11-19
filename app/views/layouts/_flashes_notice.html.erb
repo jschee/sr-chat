@@ -1,0 +1,13 @@
+<div id="flash" class="w-full bg-black text-white py-2">
+  <div class="text-xs text-center">
+    <%= message %>
+  </div>
+</div>
+
+<script>
+  var flash = document.getElementById('flash')
+  setTimeout(function(){
+    flash.style.display = 'block' ? 'none' : 'block'
+  }, 3500)
+</script>
+
