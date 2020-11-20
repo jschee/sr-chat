@@ -48,7 +48,7 @@
           </div>
         </div>
       </main>
-      <aside class="hidden lg:block w-1/4 border-l">
+      <aside class="hidden lg:block w-1/4 border-l overflow-y-auto">
         <header class="p-4">
           <div class="text-lg font-bold">About</div>
           <article class="my-10">
@@ -57,8 +57,9 @@
                 <div class="flex justify-center">
                   <img src="<%= @recipient.avatar %>" alt="" class="object-cover w-16 h-16 rounded-full border">
                 </div>
-                <p class="mt-1 text-sm font-bold mb-2"><%= @recipient.username %></p>
-                <p class="my-1"><span class="bg-purple-600 text-white text-center py-1 px-2 shadow rounded">Business</span></p>
+                <p class="mt-1 text-center text-sm font-bold mb-2"><%= @recipient.username %></p>
+                <p class="mt-1 text-center text-sm font-bold mb-2"><%= @recipient.email %></p>
+                <p class="my-1 text-center"><span class="bg-purple-600 text-white text-center py-1 px-2 shadow rounded">Business</span></p>
               </div>
               <div class="flex justify-between items-center w-full my-1 text-sm">
                 <div class="text-gray-700">Reviews</div>

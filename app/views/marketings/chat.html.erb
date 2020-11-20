@@ -1,4 +1,5 @@
 <div class="max-w-6xl mx-auto py-8 px-2 text-xs">
+  <%= link_to "sign out", destroy_user_session_path, method: :delete %>
   <div class="bg-white border" style="height: calc(100vh - 7em)">
     <div class="flex w-full h-full">
       <aside class="w-1/4 border-r overflow-y-hidden">
@@ -9,21 +10,25 @@
           </div>
         </header>
         <div class="overflow-y-scroll w-full overflow-x-hidden" style="flex: 1; height: calc(100% - 65px)">
-          <div class="bg-green-100 p-4 border-b">
-            <div class="flex items-start">
-              <img src="<%= @recipient.avatar %>" alt="" class="object-cover w-10 h-10 rounded-full border">
-              <div class="pl-2" style="flex: 1">
-                <div class="flex justify-between mb-1">
-                  <div class="font-semibold"><%= @recipient.username %></div>
-                  <div class="font-light text-gray-600 text-xs">1 month</div>
-                </div>
-                <div class="flex justify-between items-center">
-                  <div class="font-light text-gray-600">OK :) Waiting for yo...</div>
-                  <div class="text-green-400 font-bold"><small>online</small></div>
+          <% @chat_rooms.each do |room| %>
+            <%= link_to chat_path(room.slug) do %>
+              <div class="<%= 'bg-green-100' if params[:chat_slug] == room.slug %> p-4 border-b">
+                <div class="flex items-start">
+                  <img src="<%= room.other_users_in_room(current_user).avatar %>" alt="" class="object-cover w-10 h-10 rounded-full border">
+                  <div class="pl-2" style="flex: 1">
+                    <div class="flex justify-between mb-1">
+                      <div class="font-semibold"><%= room.other_users_in_room(current_user).username %></div>
+                      <div class="font-light text-gray-600 text-xs">1 month</div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <div class="font-light text-gray-600"><%= room.messages.last.message.truncate(25) %></div>
+                      <div class="text-green-400 font-bold"><small>online</small></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            <% end %>
+          <% end %>
         </div>
       </aside>
       <main style="flex: 1">
@@ -62,7 +67,7 @@
           </div>
         </div>
       </main>
-      <aside class="hidden lg:block w-1/4 border-l">
+      <aside class="hidden lg:block w-1/4 border-l overflow-y-auto">
         <header class="p-4">
           <div class="text-lg font-bold">About</div>
           <article class="my-10">
@@ -71,8 +76,10 @@
                 <div class="flex justify-center">
                   <img src="<%= @recipient.avatar %>" alt="" class="object-cover w-16 h-16 rounded-full border">
                 </div>
-                <p class="mt-1 text-sm font-bold mb-2"><%= @recipient.username %></p>
-                <p class="my-1"><span class="bg-purple-600 text-white text-center py-1 px-2 shadow rounded">Business</span></p>
+                <p class="mt-1 text-center text-sm font-bold mb-2"><%= @recipient.username %></p>
+                <p class="mt-1 text-center text-sm font-bold mb-2"><%= @recipient.email %></p>
+                <p class="mt-1 text-center text-sm font-bold mb-2"><%= @recipient.slug %></p>
+                <p class="my-1 text-center"><span class="bg-purple-600 text-white text-center py-1 px-2 shadow rounded">Business</span></p>
               </div>
               <div class="flex justify-between items-center w-full my-1 text-sm">
                 <div class="text-gray-700">Reviews</div>

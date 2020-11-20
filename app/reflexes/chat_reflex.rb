@@ -15,6 +15,7 @@ class ChatReflex < ApplicationReflex
                 )
     )
     cable_ready.broadcast
+
   end
 
 end

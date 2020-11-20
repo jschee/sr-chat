@@ -8,4 +8,8 @@ class ChatRoom < ApplicationRecord
     self.slug = SecureRandom.urlsafe_base64(6)
   end
 
+  def other_users_in_room(user)
+    self.users.select{|x| x != user}.first # right now it just grabs first user
+  end
+
 end

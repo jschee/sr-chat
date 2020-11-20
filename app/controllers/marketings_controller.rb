@@ -15,8 +15,8 @@ class MarketingsController < ApplicationController
 
   def create_chat
     chat_room = ChatRoom.create
-    ChatParticipant.create(chat_room_id: chat_room.id, user_id: current_user.id)
-    ChatParticipant.create(chat_room_id: chat_room.id, user_id: @recipient.id)
+    ChatParticipant.create(chat_room_id: chat_room.id, chat_room_slug: chat_room.slug, user_id: current_user.id)
+    ChatParticipant.create(chat_room_id: chat_room.id, chat_room_slug: chat_room.slug, user_id: @recipient.id)
     if chat_room.save
       redirect_to chat_path(chat_slug: chat_room.slug)
     end
@@ -24,10 +24,10 @@ class MarketingsController < ApplicationController
 
   def chat
     if @chat_room
+      @chat_rooms = current_user.chat_rooms
       recipient = @chat_room.users.select{|x| x.id != current_user.id}
       @recipient = recipient.first
       @messages = @chat_room.messages
-      @buddy_list = current_user.chat_rooms.where(chat_participants: {user_id: current_user.id})
     end
   end
 
