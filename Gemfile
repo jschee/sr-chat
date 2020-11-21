@@ -24,6 +24,7 @@ gem 'image_processing', '~> 1.2'
 gem "stimulus_reflex"
 gem "cable_ready", "~> 4.3"
 gem "aws-sdk-s3", require: false
+gem "pagy", "~> 3.5"
 
 # API SUPPORT
 gem 'jbuilder', '~> 2.7'
