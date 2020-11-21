@@ -18,6 +18,11 @@ class ChatReflex < ApplicationReflex
     cable_ready.broadcast
   end
 
+  def send_attached
+    element = element
+    debugger
+  end
+
   # def fetch_messages(last_messages_amount, chat_slug)
   #   morph :nothing
   #   @messages = ChatRoom.find_by(slug: chat_slug).messages

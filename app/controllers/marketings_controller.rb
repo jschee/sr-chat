@@ -52,11 +52,19 @@ class MarketingsController < ApplicationController
     end
   end
 
-  private
+  def send_attach
+    @chat_room = ChatRoom.find_by(slug: params[:chat_slug])
+    @user = User.find_by(id: params[:user_id])
+    @message = Message.create(message_params)
+    respond_to do |format|
+      format.js
+      format.html do
+        redirect_to request.referrer
+      end
+    end
+  end
 
-  # def validate_users_share_a_chat_room
-  #   current_user.chat_rooms.joins(:chat_participants).where(chat_participants: {user_id: @recipient.id}).first
-  # end
+  private
 
   def set_recipient
     @recipient = User.find_by(slug: params[:user_slug])
@@ -64,6 +72,10 @@ class MarketingsController < ApplicationController
 
   def set_chat_room
     @chat_room = ChatRoom.find_by(slug: params[:chat_slug])
+  end
+
+  def message_params
+    params.require(:message).permit(:message, :user_id, :chat_room_id, :file)
   end
 
 end

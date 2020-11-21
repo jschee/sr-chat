@@ -63,4 +63,21 @@ export default class extends ApplicationController {
     }
   }
 
+  attach_files = (event) => {
+    Rails.stopEverything(event);
+    console.log('inhere')
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => {
+      let file = e.target.files[0];
+      console.log('1', file)
+      console.log('2', file.name)
+      console.log('3', file.size)
+      if (file) {
+        this.stimulate('chat#send_attached', e.target)
+      }
+    }
+    input.click();
+  }
+
 }

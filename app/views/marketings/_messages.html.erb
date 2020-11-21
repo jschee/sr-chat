@@ -3,7 +3,7 @@
     <img src="<%= msg.user.avatar %>" alt="" class="mt-1 object-cover w-8 h-8 rounded-full border">
     <div class="pl-2" style="flex: 1">
       <div><strong class="text-sm"><%= msg.user.username %></strong><span class="pl-2 text-gray-600"><%= readable_datetime(msg.created_at) %></span></div>
-      <div class="text-sm text-gray-700"><%= msg.message %></div>
+      <div class="text-sm text-gray-700"><%= msg.message %>  <% if msg.file.present? %> <a href="<%= rails_blob_path(msg.file) %>" class='text-blue-400 hover:text-blue-600 cursor-pointer underline' download>Download</a><% end %></div>
     </div>
   </div>
 <% end %>
