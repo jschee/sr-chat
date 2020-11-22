@@ -1,4 +1,5 @@
 class ChatReflex < ApplicationReflex
+  delegate :current_user, to: :connection
   include CableReady::Broadcaster
 
   def send_message(message)

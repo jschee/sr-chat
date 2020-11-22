@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   get '/chat/:chat_slug' => "marketings#chat", as: "chat"
   get '/chat/:chat_slug/:message_count' => "marketings#get_old_messages", as: "get_old_messages"
   post '/chat/:chat_slug/:user_id/attachment' => 'marketings#send_attach', as: "send_attached"
+  delete '/chat/message/:message_slug' => 'marketings#delete_message', as: "delete_message"
 end
 

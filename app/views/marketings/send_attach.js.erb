@@ -1,6 +1,0 @@
-var message = `<%= j render "message_with_attachment", msg: @message %>`;
-var target = document.getElementById('messages-timeline');
-target.insertAdjacentHTML('beforeend', message);
-document.querySelector('#attach-input').value = "";
-var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
-element_to_scroll_to.scrollIntoView();

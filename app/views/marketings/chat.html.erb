@@ -29,11 +29,11 @@
                 <footer class="px-1 py-3">
                   <div class="flex justify-between items-center">
                     <div>
-                      <%= form_with model: Message.new, method: :post, url: send_attached_path(user_id: current_user.id, chat_slug: params[:chat_slug]) do |f| %>
+                      <%= form_with model: Message.new, method: :post, url: send_attached_path(user_id: current_user.id, chat_slug: params[:chat_slug]), remote: true do |f| %>
                         <%= f.hidden_field :chat_room_id, value: @chat_room.id %>
                         <%= f.hidden_field :user_id, value: current_user.id %>
-                        <%= f.hidden_field :message, value: "Download attachment" %>
-                        <%= f.file_field :file, onchange: "sendAttached()", id: "attach-input" %>
+                        <%= f.hidden_field :message, value: "File received" %>
+                        <%= f.file_field :file, id: "attach-input", class: 'focus:outline-none', data: {controller: 'chat', action: 'change->chat#sendAttached'} %>
                         <%= f.submit class: 'hidden', id: "attach-send" %>
                       <% end %>
                     </div>
@@ -50,13 +50,11 @@
 </div>
 
 
+
 <script>
+
   var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
   element_to_scroll_to.scrollIntoView();
 
-  function sendAttached () {
-    var submit = document.getElementById('attach-send');
-    submit.click();
-  }
-
 </script>
+

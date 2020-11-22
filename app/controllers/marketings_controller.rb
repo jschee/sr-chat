@@ -1,6 +1,7 @@
 class MarketingsController < ApplicationController
   before_action :set_chat_room, only: [:chat]
   before_action :set_recipient, only: [:start_conversation, :create_chat]
+  include CableReady::Broadcaster
 
   def home
     @users = User.where.not(id: current_user.id).order(created_at: :asc)
@@ -38,11 +39,11 @@ class MarketingsController < ApplicationController
     # @previous_messages = @messages[@previous_messages_range]
     # @previous_messages
 
-
-
     @chat_messages = ChatRoom.find_by(slug: params[:chat_slug]).messages
     @messages = @chat_messages[0..-11]
     @messages_enum = @messages.lazy.reverse_each.each_slice(10).map(&:reverse)
+    p @messages_enum
+    p '-----------------------------------------------------'
     @messages_enum.next # Fetch the last 10 messages
     respond_to do |format|
       format.html
@@ -56,11 +57,23 @@ class MarketingsController < ApplicationController
     @chat_room = ChatRoom.find_by(slug: params[:chat_slug])
     @user = User.find_by(id: params[:user_id])
     @message = Message.create(message_params)
+    cable_ready["ChatChannel"].insert_adjacent_html(
+      selector: "#messages-timeline",
+      position: "beforeend",
+      html:     ApplicationController.render(
+                  partial: "marketings/message",
+                  locals: {msg: @message}
+                )
+    )
+    cable_ready.broadcast
+  end
+
+  def delete_message
+    @message = Message.find_by(slug: params[:message_slug])
+    @message.destroy
     respond_to do |format|
       format.js
-      format.html do
-        redirect_to request.referrer
-      end
+      format.html
     end
   end
 

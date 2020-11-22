@@ -11,4 +11,12 @@ module ApplicationHelper
     string.to_s.html_safe
   end
 
+  def filename_truncate(file)
+    if file.length > 15
+      file[0..8] + '...' + file[file.length-6..-1]
+    else
+      file
+    end
+  end
+
 end

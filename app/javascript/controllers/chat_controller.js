@@ -14,6 +14,7 @@ export default class extends ApplicationController {
   connect() {
     console.log(this.messageContainerCount);
     StimulusReflex.register(this);
+
     document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
       let messages = document.querySelectorAll(".message-container");
       let lastMessage = messages[messages.length - 1];
@@ -21,21 +22,22 @@ export default class extends ApplicationController {
     });
   }
 
+
+
   getMessages(event) {
     Rails.stopEverything(event);
     let chatWindow = document.getElementById('chat-window');
     if (chatWindow.scrollTop === 0 ) {
       let slug = event.target.dataset.slug;
       let messagesCount = this.messageContainerCount;
-      this.fetchMessages(slug, messagesCount);
+      let lastScrollHeight = chatWindow.scrollHeight;
+      this.fetchMessages(slug, messagesCount, lastScrollHeight);
     }
   }
-
-  fetchMessages(slug, messagesCount) {
+  fetchMessages(slug, messagesCount, lastScrollHeight) {
     Rails.stopEverything(event);
     console.log('fetching...')
     let chatWindow = document.getElementById('chat-window');
-    let lastScrollHeight = chatWindow.scrollHeight;
     Rails.ajax({
       type: "GET",
       url: `/chat/${slug}/${messagesCount}`,
@@ -43,12 +45,32 @@ export default class extends ApplicationController {
       success: (data) => {
         console.log(data);
         this.timelineTarget.insertAdjacentHTML('afterbegin', data.entries)
-        chatWindow.scrollTop += (chatWindow.scrollHeight-lastScrollHeight)
+        chatWindow.scrollTop += (chatWindow.scrollHeight - lastScrollHeight)
       }
     })
 
     this.messageContainerCount ++
     console.log(this.messageContainerCount)
+  }
+
+  sendAttached() {
+    var submit = document.getElementById('attach-send');
+    var file_input = document.getElementById('attach-input');
+    submit.click();
+    file_input.value = ''
+
+  }
+
+  showOptions (event) {
+    console.log('1. inhere')
+    var options = event.target.querySelector('.message-options');
+    options.classList.remove('hidden');
+  }
+
+  hideOptions (event) {
+    console.log('2. inhere')
+    var options = event.target.querySelector('.message-options');
+    options.classList.add('hidden');
   }
 
   send_message = (event) => {
@@ -61,23 +83,6 @@ export default class extends ApplicationController {
     } else {
       alert('You need to type something!')
     }
-  }
-
-  attach_files = (event) => {
-    Rails.stopEverything(event);
-    console.log('inhere')
-    let input = document.createElement('input');
-    input.type = 'file';
-    input.onchange = e => {
-      let file = e.target.files[0];
-      console.log('1', file)
-      console.log('2', file.name)
-      console.log('3', file.size)
-      if (file) {
-        this.stimulate('chat#send_attached', e.target)
-      }
-    }
-    input.click();
   }
 
 }
