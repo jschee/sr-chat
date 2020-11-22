@@ -1,5 +1,5 @@
 <aside class="w-1/4 border-r overflow-y-hidden">
-  <header class="px-4 border-b flex justify-center" style="min-height: 65px; height: 65px; z-index: 5;">
+  <header class="px-4 border-b flex justify-center" style="min-height: 65px; height: 65px;">
     <div class="flex justify-between items-center w-full">
       <div>All conversations</div>
       <div class="underline">Search</div>
@@ -8,12 +8,14 @@
   <div class="overflow-y-scroll w-full overflow-x-hidden" style="flex: 1; height: calc(100% - 65px)">
     <% @chat_rooms.each do |room| %>
       <%= link_to chat_path(room.slug) do %>
+        <div class="relative" style="z-index: 999">
+        <div class="absolute" id="profile-card" style="bottom: -100%; right: 18%;"></div>
         <div class="<%= 'bg-green-100' if params[:chat_slug] == room.slug %> p-4 border-b">
           <div class="flex items-start">
-            <img src="<%= room.other_users_in_room(current_user).avatar %>" alt="" class="object-cover w-10 h-10 rounded-full border">
+            <img data-controller="chat" src="<%= room.all_users_excluding(current_user.freeze).avatar %>" class="object-cover w-10 h-10 rounded-full border" data-user="<%= room.all_users_excluding(current_user.freeze).slug %>">
             <div class="pl-2" style="flex: 1">
               <div class="flex justify-between mb-1">
-                <div class="font-semibold"><%= room.other_users_in_room(current_user).username %></div>
+                <div class="font-semibold"><%= room.all_users_excluding(current_user.freeze).username %></div>
                 <div class="font-light text-gray-600 text-xs">1 month</div>
               </div>
               <div class="flex justify-between items-center">
@@ -22,6 +24,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       <% end %>
     <% end %>

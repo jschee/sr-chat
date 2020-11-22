@@ -22,8 +22,6 @@ export default class extends ApplicationController {
     });
   }
 
-
-
   getMessages(event) {
     Rails.stopEverything(event);
     let chatWindow = document.getElementById('chat-window');
@@ -34,6 +32,7 @@ export default class extends ApplicationController {
       this.fetchMessages(slug, messagesCount, lastScrollHeight);
     }
   }
+
   fetchMessages(slug, messagesCount, lastScrollHeight) {
     Rails.stopEverything(event);
     console.log('fetching...')
@@ -62,16 +61,15 @@ export default class extends ApplicationController {
   }
 
   showOptions (event) {
-    console.log('1. inhere')
     var options = event.target.querySelector('.message-options');
     options.classList.remove('hidden');
   }
 
   hideOptions (event) {
-    console.log('2. inhere')
     var options = event.target.querySelector('.message-options');
     options.classList.add('hidden');
   }
+
 
   send_message = (event) => {
     Rails.stopEverything(event);

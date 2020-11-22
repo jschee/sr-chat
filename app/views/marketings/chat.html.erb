@@ -18,7 +18,7 @@
         </header>
         <div class="flex flex-col" style="height: calc(100% - 65px);">
             <div id="chat-window" class="bg-white h-full w-full overflow-x-hidden overflow-y-auto m-0"  data-controller="chat" data-action="scroll->chat#getMessages" data-slug="<%= params[:chat_slug] %>">
-              <div id="messages-timeline" data-target="chat.timeline">
+              <div id="messages-timeline-<%= params["chat_slug"]%>" data-target="chat.timeline">
                 <%= render 'messages'%>
                 <div id="auto-scroll-anchor"></div>
               </div>
@@ -29,15 +29,15 @@
                 <footer class="px-1 py-3">
                   <div class="flex justify-between items-center">
                     <div>
-                      <%= form_with model: Message.new, method: :post, url: send_attached_path(user_id: current_user.id, chat_slug: params[:chat_slug]), remote: true do |f| %>
+                      <%= form_with model: Message.new, method: :post, url: send_attached_path(user_id: current_user.id, chat_slug: params[:chat_slug]), remote: false do |f| %>
                         <%= f.hidden_field :chat_room_id, value: @chat_room.id %>
                         <%= f.hidden_field :user_id, value: current_user.id %>
-                        <%= f.hidden_field :message, value: "File received" %>
+                        <%= f.hidden_field :message, value: "I sent you a file" %>
                         <%= f.file_field :file, id: "attach-input", class: 'focus:outline-none', data: {controller: 'chat', action: 'change->chat#sendAttached'} %>
                         <%= f.submit class: 'hidden', id: "attach-send" %>
                       <% end %>
                     </div>
-                    <%= submit_tag "Send", class: "font-bold text-white py-1 px-3 rounded border text-md bg-green-500 hover:bg-green-700 cursor-pointer", data: { chat_room_id: @chat_room.id, controller: "chat", action: "click->chat#send_message" } %>
+                    <%= submit_tag "Send", class: "font-bold text-white py-1 px-3 rounded border text-md bg-green-500 hover:bg-green-700 cursor-pointer", data: { chat_room_id: @chat_room.id, chat_room_slug: @chat_room.slug, controller: "chat", action: "click->chat#send_message" } %>
                   </div>
                 </footer>
             </div>
