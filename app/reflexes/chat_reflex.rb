@@ -19,6 +19,7 @@ class ChatReflex < ApplicationReflex
                 )
     )
     cable_ready.broadcast
+
   end
 
   def fetch_messages(chat_room_id, user_slug, current_message_count)
@@ -36,5 +37,10 @@ class ChatReflex < ApplicationReflex
                 )
     )
     cable_ready.broadcast
+  end
+
+
+  def method_name
+
   end
 end

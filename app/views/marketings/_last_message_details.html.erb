@@ -1,0 +1,10 @@
+<div id="last-message-<%= room.id %>" class="pl-2" style="flex: 1">
+  <div class="flex justify-between mb-1">
+    <div class="users-username font-semibold"><%= room.all_users_excluding(current_user.freeze).username %></div>
+    <div id="last-message-date" class="font-light text-gray-600"><small><%= readable_time(room.messages.last.created_at) %></small></div>
+  </div>
+  <div class="flex justify-between items-center">
+    <div id="last-message" class="font-light text-gray-600"><%= room.messages.last.message.truncate(25) %></div>
+    <div class="text-green-400 font-bold"><small>online</small></div>
+  </div>
+</div>

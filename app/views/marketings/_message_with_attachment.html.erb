@@ -1,4 +1,4 @@
-<div class="message-container message-<%= msg.slug %> flex items-start py-4 px-4 hover:bg-orange-100" data-controller="chat" data-action="mouseenter->chat#showOptions mouseleave->chat#hideOptions">
+<div class="message-container message-<%= msg.slug %> flex items-start py-4 px-4 hover:bg-orange-100" data-controller="chat" data-action="mouseover->chat#showOptions mouseleave->chat#hideOptions">
   <img src="<%= msg.user.avatar %>" alt="" class="mt-1 object-cover w-8 h-8 rounded-full border">
   <div class="pl-2" style="flex: 1">
     <div>

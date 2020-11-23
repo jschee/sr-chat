@@ -27,8 +27,6 @@ export default class extends ApplicationController {
       this.lastScrollHeight += chatWindow.scrollHeight;
       console.log(this.lastScrollHeight)
       this.fetchMessages(chatRoomId, userSlug, messagesCount);
-
-
     }
   }
 
@@ -49,6 +47,7 @@ export default class extends ApplicationController {
   }
 
   sendAttached() {
+    Rails.stopEverything(event);
     var submit = document.getElementById('attach-send');
     var file_input = document.getElementById('attach-input');
     submit.click();
@@ -57,13 +56,51 @@ export default class extends ApplicationController {
   }
 
   showOptions (event) {
+    Rails.stopEverything(event);
     var options = event.target.querySelector('.message-options');
     options.classList.remove('hidden');
   }
 
   hideOptions (event) {
+    Rails.stopEverything(event);
     var options = event.target.querySelector('.message-options');
     options.classList.add('hidden');
+  }
+
+  revealSearch (event) {
+    Rails.stopEverything(event);
+    var search = document.getElementById('search-chats');
+    search.classList.remove('hidden');
+    var input = document.getElementById('chat-search-input')
+    input.focus()
+  }
+
+  hideSearch (event) {
+    Rails.stopEverything(event);
+    console.log(this)
+    var search = document.getElementById('search-chats');
+    var input = document.getElementById('chat-search-input')
+    search.classList.add('hidden');
+    input.value = '';
+  }
+
+  searchConversations (event) {
+    Rails.stopEverything(event);
+    let input = document.getElementById("chat-search-input");
+    let filter = input.value.toUpperCase();
+    let list = document.getElementById("chat-list");
+    let chatroom = list.getElementsByTagName("li");
+    for ( let i = 0; i < chatroom.length; i++ ) {
+      let first = chatroom[i].getElementsByClassName("users-username")[0];
+      console.log(first)
+      let txtValue = first.textContent || first.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        chatroom[i].style.display = ""
+      } else {
+        chatroom[i].style.display = "none"
+      }
+    }
+
   }
 
 

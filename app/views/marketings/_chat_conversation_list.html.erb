@@ -1,32 +1,44 @@
 <aside class="w-1/4 border-r overflow-y-hidden">
-  <header class="px-4 border-b flex justify-center" style="min-height: 65px; height: 65px;">
+  <header class="px-4 border-b flex justify-center relative" style="min-height: 65px; height: 65px;">
     <div class="flex justify-between items-center w-full">
       <div>All conversations</div>
-      <div class="underline">Search</div>
+      <button class="underline text-blue-500 hover:text-blue-700" data-controller="chat" data-action="click->chat#revealSearch">Search</button>
+    </div>
+    <div id="search-chats" class="hidden absolute top-0 left-0 right-0 bottom-0 transition-opacity bg-white ease-in-out">
+      <div class="w-full h-full flex items-center p-4">
+        <div class="w-4/5">
+          <input id="chat-search-input" data-controller="chat" data-action="keyup->chat#searchConversations" type="text" class="border rounded shadow-md bg-white w-full h-8 p-2 focus:outline-none" placeholder="Search username...">
+        </div>
+        <div class="pl-2 w-1/5 text-center">
+          <button class="underline text-blue-500 hover:text-blue-700" data-controller="chat" data-action="click->chat#hideSearch">Cancel</button>
+        </div>
+      </div>
     </div>
   </header>
   <div class="overflow-y-scroll w-full overflow-x-hidden" style="flex: 1; height: calc(100% - 65px)">
-    <% @chat_rooms.each do |room| %>
-      <%= link_to chat_path(room.slug) do %>
-        <div class="relative" style="z-index: 999">
-        <div class="absolute" id="profile-card" style="bottom: -100%; right: 18%;"></div>
-        <div class="<%= 'bg-green-100' if params[:chat_slug] == room.slug %> p-4 border-b">
-          <div class="flex items-start">
-            <img data-controller="chat" src="<%= room.all_users_excluding(current_user.freeze).avatar %>" class="object-cover w-10 h-10 rounded-full border" data-user="<%= room.all_users_excluding(current_user.freeze).slug %>">
-            <div class="pl-2" style="flex: 1">
-              <div class="flex justify-between mb-1">
-                <div class="font-semibold"><%= room.all_users_excluding(current_user.freeze).username %></div>
-                <div class="font-light text-gray-600 text-xs">1 month</div>
-              </div>
-              <div class="flex justify-between items-center">
-                <div class="font-light text-gray-600"><%= room.messages.last.message.truncate(25) %></div>
-                <div class="text-green-400 font-bold"><small>online</small></div>
+    <ul id="chat-list">
+      <% @chat_rooms.each do |room| %>
+        <%= link_to chat_path(room.slug) do %>
+          <li>
+            <div class="<%= 'bg-green-100' if params[:chat_slug] == room.slug %> p-4 border-b chat-room">
+              <div class="flex items-start">
+                <img data-controller="chat" src="<%= room.all_users_excluding(current_user.freeze).avatar %>" class="object-cover w-10 h-10 rounded-full border" data-user="<%= room.all_users_excluding(current_user.freeze).slug %>">
+                <div class="pl-2" style="flex: 1">
+                  <div class="flex justify-between mb-1">
+                    <div class="users-username font-semibold"><%= room.all_users_excluding(current_user.freeze).username %></div>
+                    <div class="font-light text-gray-600"><small><%= readable_time(room.messages.last.created_at) %></small></div>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <div class="font-light text-gray-600"><%= room.messages.last.message.truncate(25) %></div>
+                    <div class="text-green-400 font-bold"><small>online</small></div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        </div>
+          </li>
+        <% end %>
       <% end %>
-    <% end %>
+    </ul>
   </div>
 </aside>
+
