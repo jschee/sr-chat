@@ -2,16 +2,9 @@
   <img src="<%= msg.user.avatar %>" alt="" class="mt-1 object-cover w-8 h-8 rounded-full border">
   <div class="pl-2" style="flex: 1">
     <div>
-      <div class="flex justify-between items-center">
-        <div>
-          <strong class="text-sm"><%= msg.user.username %></strong>
-          <span class="pl-1 text-gray-600"><%= readable_datetime(msg.created_at) %></span>
-        </div>
-        <div class="hidden message-options">
-
-        </div>
-      </div>
+      <strong class="text-sm"><%= msg.user.username %></strong>
+      <span class="pl-1 text-gray-600"><%= readable_datetime(msg.created_at) %></span>
     </div>
-    <div class="text-sm text-gray-700"><%= msg.message %>  <% if msg.file.present? %> <%= image_tag asset_pack_path('media/images/download_file.svg'), class: 'inline-block' %> <a href="<%= rails_blob_path(msg.file) %>" class='text-blue-500 hover:text-blue-700 cursor-pointer underline text-xs' download><%= filename_truncate(msg.file.filename.to_s.freeze) %></a><% end %></div>
+    <div class="text-sm text-gray-700"><%= msg.message %>  <% if msg.file.present? %> <a href="<%= rails_blob_path(msg.file) %>" class='text-blue-500 hover:text-blue-700 cursor-pointer underline' download><%= filename_truncate(msg.file.filename.to_s.freeze) %></a><% end %></div>
   </div>
 </div>

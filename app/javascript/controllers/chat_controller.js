@@ -9,47 +9,43 @@ export default class extends ApplicationController {
 
   initialize(){
     this.messageContainerCount = document.querySelectorAll(".message-container").length;
+    this.lastScrollHeight = 0
   }
 
   connect() {
-    console.log(this.messageContainerCount);
+    console.log('msg containers count: ', this.messageContainerCount);
     StimulusReflex.register(this);
-
-    document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
-      let messages = document.querySelectorAll(".message-container");
-      let lastMessage = messages[messages.length - 1];
-      setTimeout(lastMessage.scrollIntoView(), 600);
-    });
   }
 
   getMessages(event) {
     Rails.stopEverything(event);
     let chatWindow = document.getElementById('chat-window');
+    let chatRoomId = event.target.dataset.id;
+    let userSlug = event.target.dataset.user;
     if (chatWindow.scrollTop === 0 ) {
-      let slug = event.target.dataset.slug;
       let messagesCount = this.messageContainerCount;
-      let lastScrollHeight = chatWindow.scrollHeight;
-      this.fetchMessages(slug, messagesCount, lastScrollHeight);
+      this.lastScrollHeight += chatWindow.scrollHeight;
+      console.log(this.lastScrollHeight)
+      this.fetchMessages(chatRoomId, userSlug, messagesCount);
+
+
     }
   }
 
-  fetchMessages(slug, messagesCount, lastScrollHeight) {
+  fetchMessages(chatRoomId, userSlug, messagesCount) {
     Rails.stopEverything(event);
-    console.log('fetching...')
+    console.log('fetching messages...')
     let chatWindow = document.getElementById('chat-window');
-    Rails.ajax({
-      type: "GET",
-      url: `/chat/${slug}/${messagesCount}`,
-      dataType: 'json',
-      success: (data) => {
-        console.log(data);
-        this.timelineTarget.insertAdjacentHTML('afterbegin', data.entries)
-        chatWindow.scrollTop += (chatWindow.scrollHeight - lastScrollHeight)
-      }
-    })
+    this.stimulate('chat#fetch_messages', event.target, chatRoomId, userSlug, messagesCount);
+    this.messageContainerCount = document.querySelectorAll(".message-container").length;
 
-    this.messageContainerCount ++
-    console.log(this.messageContainerCount)
+    document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
+      console.log('inside get messages eventlistener')
+      chatWindow.scrollTop += (chatWindow.scrollHeight - this.lastScrollHeight)
+      console.log(this.lastScrollHeight)
+    });
+
+
   }
 
   sendAttached() {
@@ -74,13 +70,23 @@ export default class extends ApplicationController {
   send_message = (event) => {
     Rails.stopEverything(event);
     let textArea = document.getElementById('text-area-content');
+    let userSlug = document.getElementById('chat-window').dataset.slug;
     if (textArea.value.length > 0) {
       this.messageContainerCount ++; // increment counter state
-      this.stimulate('chat#send_message', event.target, textArea.value);
+      this.stimulate('chat#send_message', event.target, textArea.value, userSlug);
       textArea.value = "";
+      document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
+        console.log('listening to cableready in send message')
+        var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
+        element_to_scroll_to.scrollIntoView();
+      });
     } else {
       alert('You need to type something!')
     }
+  }
+
+  restScreenAfterMessage = (event) => {
+
   }
 
 }

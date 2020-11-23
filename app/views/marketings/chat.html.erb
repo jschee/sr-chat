@@ -17,8 +17,8 @@
           </div>
         </header>
         <div class="flex flex-col" style="height: calc(100% - 65px);">
-            <div id="chat-window" class="bg-white h-full w-full overflow-x-hidden overflow-y-auto m-0"  data-controller="chat" data-action="scroll->chat#getMessages" data-slug="<%= params[:chat_slug] %>">
-              <div id="messages-timeline-<%= params["chat_slug"]%>" data-target="chat.timeline">
+            <div id="chat-window" class="bg-white h-full w-full overflow-x-hidden overflow-y-auto m-0"  data-controller="chat" data-action="scroll->chat#getMessages" data-id="<%= @chat_room.id %>" data-user="<%= current_user.slug %>">
+              <div id="messages-timeline-<%= params["chat_slug"]%>-<%= current_user.slug %>" data-target="chat.timeline" class="chat-room-<%= @chat_room.slug %>">
                 <%= render 'messages'%>
                 <div id="auto-scroll-anchor"></div>
               </div>

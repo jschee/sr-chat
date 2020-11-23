@@ -33,24 +33,18 @@ class MarketingsController < ApplicationController
   end
 
   def get_old_messages
-    # @last_messages_amount = params[:message_count].to_i
-    # @previous_messages_amount = 10
-    # @previous_messages_range = -(@last_messages_amount + @previous_messages_amount)..-(@last_messages_amount + 1)
-    # @previous_messages = @messages[@previous_messages_range]
-    # @previous_messages
-
-    @chat_messages = ChatRoom.find_by(slug: params[:chat_slug]).messages
-    @messages = @chat_messages[0..-11]
-    @messages_enum = @messages.lazy.reverse_each.each_slice(10).map(&:reverse)
-    p @messages_enum
-    p '-----------------------------------------------------'
-    @messages_enum.next # Fetch the last 10 messages
-    respond_to do |format|
-      format.html
-      format.json {
-        render json: { entries: render_to_string(partial: "messages", formats: [:html]) }
-      }
-    end
+    @chat_room = ChatRoom.find_by(id: params[:chat_id])
+    @messages = @chat_room.messages
+    @new_messages = @messages.take(@messages.count - 10)
+    cable_ready["ChatChannel"].insert_adjacent_html(
+      selector: "#messages-timeline-#{@chat_room.slug}=-",
+      position: "afterbegin",
+      html:     ApplicationController.render(
+                  partial: "marketings/last_ten_messages",
+                  locals: {messages: @new_messages.last(10)}
+                )
+    )
+    cable_ready.broadcast
   end
 
   def send_attach
@@ -58,7 +52,7 @@ class MarketingsController < ApplicationController
     @user = User.find_by(id: params[:user_id])
     @message = Message.create(message_params)
     cable_ready["ChatChannel"].insert_adjacent_html(
-      selector: "#messages-timeline",
+      selector: "#messages-timeline-#{@chat_room.slug}-#{@user.slug}",
       position: "beforeend",
       html:     ApplicationController.render(
                   partial: "marketings/message",
@@ -89,6 +83,13 @@ class MarketingsController < ApplicationController
 
   def message_params
     params.require(:message).permit(:message, :user_id, :chat_room_id, :file)
+  end
+
+  def remove_last_ten(all_messages)
+    10.times.each do
+      all_messages.pop # removes last 10 items
+    end
+    all_messages
   end
 
 end
