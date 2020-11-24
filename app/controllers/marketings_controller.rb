@@ -55,7 +55,7 @@ class MarketingsController < ApplicationController
       selector: "#messages-timeline-#{@chat_room.slug}-#{@user.slug}",
       position: "beforeend",
       html:     ApplicationController.render(
-                  partial: "marketings/message",
+                  partial: "marketings/message_with_attachment",
                   locals: {msg: @message}
                 )
     )

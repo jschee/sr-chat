@@ -1,13 +1,15 @@
-<div class="max-w-6xl mx-auto py-8 px-2 text-xs">
-  <%= link_to "sign out", destroy_user_session_path, method: :delete %>
-  <div class="bg-white border" style="height: calc(100vh - 7em)">
+<div class="md:max-w-6xl md:mx-auto md:py-8 md:px-2 text-xs">
+  <%#= link_to "sign out", destroy_user_session_path, method: :delete %>
+  <div class="bg-white md:border" style="height: calc(100vh - 7em)">
     <div class="flex w-full h-full">
-      <%= render 'chat_conversation_list' %>
-      <main style="flex: 1">
-        <header class="border-b px-4" style="min-height: 65px; height: 65px; z-index: 5;">
-          <div class="flex items-center h-full">
+      <%= render 'chat_contacts_list' %>
+      <main class="flex flex-col md:flex-none h-screen md:h-auto" style="flex: 1">
+        <header class="border-b px-4 relative" style="min-height: 65px; height: 65px;">
+
+          <a href="/" class="block md:hidden absolute underline text-blue-500 hover:text-blue-700" style="left: 3%; top: 40%">Go back</a>
+          <div class="flex justify-center md:justify-start items-center h-full">
             <div>
-              <div class="text-xl font-bold"><%= @recipient.username %> <span class="text-green-400 ml-1 text-sm"><small>online</small></span></div>
+              <div class="text-center md:text-left text-lg md:text-xl font-bold "><%= @recipient.username %> <span class="text-green-400 ml-1 text-sm"><small>online</small></span></div>
               <div class="text-gray-600 flex">
                 <div>Last seen 22h ago</div>
                 <div class="mx-2">-</div>
@@ -17,14 +19,14 @@
           </div>
         </header>
         <div class="flex flex-col" style="height: calc(100% - 65px);">
-            <div id="chat-window" class="bg-white h-full w-full overflow-x-hidden overflow-y-auto m-0"  data-controller="chat" data-action="scroll->chat#getMessages" data-id="<%= @chat_room.id %>" data-user="<%= current_user.slug %>">
+            <div id="chat-window" class="bg-white w-full overflow-x-hidden overflow-y-auto m-0"  data-controller="chat" data-action="scroll->chat#getMessages" data-id="<%= @chat_room.id %>" data-user="<%= current_user.slug %>">
               <div id="messages-timeline-<%= params["chat_slug"]%>-<%= current_user.slug %>" data-target="chat.timeline" class="chat-room-<%= @chat_room.slug %>">
                 <%= render 'messages'%>
                 <div id="auto-scroll-anchor"></div>
               </div>
             </div>
-          <div class="box-border" id="input-area">
-            <div class="max-w-xl mx-auto px-4">
+          <div class="pt-3 border-t md:border-0 md:pt-0 box-border bg-white md:bg-none" id="input-area">
+            <div class="md:max-w-4xl lg:max-w-xl mx-auto px-4">
                 <%= text_area_tag :message, nil, class: "resize-none border w-full rounded shadow text-xs p-2 text-gray-700 flex", style: "flex-grow: 1", id: "text-area-content" %>
                 <footer class="px-1 py-3">
                   <div class="flex justify-between items-center">

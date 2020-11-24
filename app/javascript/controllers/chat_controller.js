@@ -52,6 +52,11 @@ export default class extends ApplicationController {
     var file_input = document.getElementById('attach-input');
     submit.click();
     file_input.value = ''
+    document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
+      console.log('listening to cableready in send message')
+      var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
+      element_to_scroll_to.scrollIntoView();
+    });
 
   }
 
@@ -121,9 +126,4 @@ export default class extends ApplicationController {
       alert('You need to type something!')
     }
   }
-
-  restScreenAfterMessage = (event) => {
-
-  }
-
 }

@@ -1,4 +1,4 @@
-<aside class="w-1/4 border-r overflow-y-hidden">
+<aside class="hidden md:block w-1/4 border-r overflow-y-hidden">
   <header class="px-4 border-b flex justify-center relative" style="min-height: 65px; height: 65px;">
     <div class="flex justify-between items-center w-full">
       <div>All conversations</div>
@@ -22,7 +22,7 @@
           <li>
             <div class="<%= 'bg-green-100' if params[:chat_slug] == room.slug %> p-4 border-b chat-room">
               <div class="flex items-start">
-                <img data-controller="chat" src="<%= room.all_users_excluding(current_user.freeze).avatar %>" class="object-cover w-10 h-10 rounded-full border" data-user="<%= room.all_users_excluding(current_user.freeze).slug %>">
+                <img data-controller="chat" src="<%= room.all_users_excluding(current_user.freeze).avatar %>" class="object-cover md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-full border" data-user="<%= room.all_users_excluding(current_user.freeze).slug %>">
                 <div class="pl-2" style="flex: 1">
                   <div class="flex justify-between mb-1">
                     <div class="users-username font-semibold"><%= room.all_users_excluding(current_user.freeze).username %></div>
