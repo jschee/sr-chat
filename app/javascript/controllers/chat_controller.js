@@ -24,7 +24,7 @@ export default class extends ApplicationController {
     let userSlug = event.target.dataset.user;
     if (chatWindow.scrollTop === 0 ) {
       let messagesCount = this.messageContainerCount;
-      this.lastScrollHeight += chatWindow.scrollHeight;
+      this.lastScrollHeight = chatWindow.scrollHeight;
       console.log(this.lastScrollHeight)
       this.fetchMessages(chatRoomId, userSlug, messagesCount);
     }
@@ -36,14 +36,15 @@ export default class extends ApplicationController {
     let chatWindow = document.getElementById('chat-window');
     this.stimulate('chat#fetch_messages', event.target, chatRoomId, userSlug, messagesCount);
     this.messageContainerCount = document.querySelectorAll(".message-container").length;
-
-    document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
+    let scrollHeight = this.lastScrollHeight;
+    var scrollTop = function(e){
+      let chatWindow = document.getElementById('chat-window');
       console.log('inside get messages eventlistener')
-      chatWindow.scrollTop += (chatWindow.scrollHeight - this.lastScrollHeight)
-      console.log(this.lastScrollHeight)
-    });
+      chatWindow.scrollTop += (chatWindow.scrollHeight - scrollHeight)
+      document.removeEventListener('cable-ready:after-insert-adjacent-html', scrollTop)
+    }
 
-
+    document.addEventListener('cable-ready:after-insert-adjacent-html', scrollTop);
   }
 
   sendAttached() {
