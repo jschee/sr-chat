@@ -5,7 +5,15 @@
       <%= render 'chat_contacts_list' %>
       <main class="flex flex-col md:flex-none h-screen md:h-auto" style="flex: 1">
         <header class="border-b px-4 relative" style="min-height: 65px; height: 65px;">
-
+          <div class="absolute cursor-pointer" style="right: 3%; top: 35%">
+            <div class="relative">
+              <div class="more-options">
+                <em class="inline-block bg-indigo-500" style="border-radius: 50%; width: 0.45em; height: 0.45em;"></em>
+                <em class="inline-block bg-indigo-500" style="border-radius: 50%; width: 0.45em; height: 0.45em;"></em>
+                <em class="inline-block bg-indigo-500" style="border-radius: 50%; width: 0.45em; height: 0.45em;"></em>
+              </div>
+            </div>
+          </div>
           <a href="/" class="block md:hidden absolute underline text-blue-500 hover:text-blue-700" style="left: 3%; top: 40%">Go back</a>
           <div class="flex justify-center md:justify-start items-center h-full">
             <div>
@@ -15,6 +23,11 @@
                 <div class="mx-2">-</div>
                 <div>Local time Nov 18, 9:31AM</div>
               </div>
+            </div>
+          </div>
+          <div id="new-message-toast" class="new-message absolute hidden" style="bottom: -50%; left:0; right:0; z-index: 5">
+            <div class="w-2/4 max-w-xs mx-auto flex justify-center">
+              <div class="rounded-2xl bg-indigo-500 text-center py-1 px-3 text-white font-semibold">New Message</div>
             </div>
           </div>
         </header>
@@ -39,7 +52,7 @@
                         <%= f.submit class: 'hidden', id: "attach-send" %>
                       <% end %>
                     </div>
-                    <%= submit_tag "Send", class: "font-bold text-white py-1 px-3 rounded border text-md bg-green-500 hover:bg-green-700 cursor-pointer", data: { chat_room_id: @chat_room.id, chat_room_slug: @chat_room.slug, controller: "chat", action: "click->chat#send_message" } %>
+                    <%= submit_tag "Send", class: "font-bold text-white py-1 px-3 rounded border text-md bg-green-500 hover:bg-green-700 cursor-pointer", data: { chat_room_id: @chat_room.id, chat_room_slug: @chat_room.slug, controller: "chat", action: "click->chat#sendMessage" } %>
                   </div>
                 </footer>
             </div>

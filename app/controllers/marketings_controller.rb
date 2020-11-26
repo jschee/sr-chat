@@ -1,6 +1,7 @@
 class MarketingsController < ApplicationController
   before_action :set_chat_room, only: [:chat]
   before_action :set_recipient, only: [:start_conversation, :create_chat]
+
   include CableReady::Broadcaster
 
   def home

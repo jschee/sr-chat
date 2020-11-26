@@ -9,7 +9,7 @@
     "@rails/webpacker": "4.3.0",
     "lodash": "^4.17.20",
     "stimulus": "^1.1.1",
-    "stimulus_reflex": "3.3.0",
+    "stimulus_reflex": "3.4.0-pre4",
     "tailwindcss": "^1.9.6",
     "turbolinks": "^5.2.0",
     "typeface-inter": "^1.1.13"

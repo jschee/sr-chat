@@ -6,6 +6,17 @@ GIT
     faker (2.14.0)
       i18n (>= 1.6, < 2)
 
+GIT
+  remote: https://github.com/hopsoft/stimulus_reflex.git
+  revision: fc83d1bbec4a47a36a25fdaa5be3d999782a2809
+  specs:
+    stimulus_reflex (3.4.0.pre4)
+      cable_ready (>= 4.3.0)
+      nokogiri
+      rack
+      rails (>= 5.2)
+      redis
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -272,12 +283,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stimulus_reflex (3.3.0)
-      cable_ready (>= 4.3.0)
-      nokogiri
-      rack
-      rails (>= 5.2)
-      redis
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -336,7 +341,7 @@ DEPENDENCIES
   sassc-rails
   spring
   spring-watcher-listen (~> 2.0.0)
-  stimulus_reflex
+  stimulus_reflex!
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)

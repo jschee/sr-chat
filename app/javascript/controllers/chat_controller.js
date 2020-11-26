@@ -17,6 +17,12 @@ export default class extends ApplicationController {
     StimulusReflex.register(this);
   }
 
+  toAnchor () {
+    var jumpToAnchor = document.getElementById('auto-scroll-anchor');
+    jumpToAnchor.scrollIntoView();
+    document.removeEventListener('cable-ready:after-insert-adjacent-html', this.toAnchor);
+  }
+
   getMessages(event) {
     Rails.stopEverything(event);
     let chatWindow = document.getElementById('chat-window');
@@ -25,26 +31,36 @@ export default class extends ApplicationController {
     if (chatWindow.scrollTop === 0 ) {
       let messagesCount = this.messageContainerCount;
       this.lastScrollHeight = chatWindow.scrollHeight;
-      console.log(this.lastScrollHeight)
       this.fetchMessages(chatRoomId, userSlug, messagesCount);
     }
   }
 
   fetchMessages(chatRoomId, userSlug, messagesCount) {
     Rails.stopEverything(event);
-    console.log('fetching messages...')
     let chatWindow = document.getElementById('chat-window');
     this.stimulate('chat#fetch_messages', event.target, chatRoomId, userSlug, messagesCount);
     this.messageContainerCount = document.querySelectorAll(".message-container").length;
     let scrollHeight = this.lastScrollHeight;
     var scrollTop = function(e){
       let chatWindow = document.getElementById('chat-window');
-      console.log('inside get messages eventlistener')
       chatWindow.scrollTop += (chatWindow.scrollHeight - scrollHeight)
       document.removeEventListener('cable-ready:after-insert-adjacent-html', scrollTop)
     }
-
     document.addEventListener('cable-ready:after-insert-adjacent-html', scrollTop);
+  }
+
+  sendMessage = (event) => {
+    Rails.stopEverything(event);
+    let textArea = document.getElementById('text-area-content');
+    let userSlug = document.getElementById('chat-window').dataset.slug;
+    if (textArea.value.length > 0) {
+      this.messageContainerCount ++; // increment counter state
+      this.stimulate('chat#send_message', event.target, textArea.value, userSlug);
+      textArea.value = "";
+      document.addEventListener('cable-ready:after-insert-adjacent-html', this.toAnchor)
+    } else {
+      alert('You need to type something!')
+    }
   }
 
   sendAttached() {
@@ -53,12 +69,7 @@ export default class extends ApplicationController {
     var file_input = document.getElementById('attach-input');
     submit.click();
     file_input.value = ''
-    document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
-      console.log('listening to cableready in send message')
-      var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
-      element_to_scroll_to.scrollIntoView();
-    });
-
+    document.addEventListener('cable-ready:after-insert-adjacent-html', this.toAnchor);
   }
 
   showOptions (event) {
@@ -83,7 +94,6 @@ export default class extends ApplicationController {
 
   hideSearch (event) {
     Rails.stopEverything(event);
-    console.log(this)
     var search = document.getElementById('search-chats');
     var input = document.getElementById('chat-search-input')
     search.classList.add('hidden');
@@ -98,7 +108,6 @@ export default class extends ApplicationController {
     let chatroom = list.getElementsByTagName("li");
     for ( let i = 0; i < chatroom.length; i++ ) {
       let first = chatroom[i].getElementsByClassName("users-username")[0];
-      console.log(first)
       let txtValue = first.textContent || first.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
         chatroom[i].style.display = ""
@@ -109,22 +118,13 @@ export default class extends ApplicationController {
 
   }
 
-
-  send_message = (event) => {
-    Rails.stopEverything(event);
-    let textArea = document.getElementById('text-area-content');
-    let userSlug = document.getElementById('chat-window').dataset.slug;
-    if (textArea.value.length > 0) {
-      this.messageContainerCount ++; // increment counter state
-      this.stimulate('chat#send_message', event.target, textArea.value, userSlug);
-      textArea.value = "";
-      document.addEventListener('cable-ready:after-insert-adjacent-html', e => {
-        console.log('listening to cableready in send message')
-        var element_to_scroll_to = document.getElementById('auto-scroll-anchor');
-        element_to_scroll_to.scrollIntoView();
-      });
-    } else {
-      alert('You need to type something!')
-    }
+  beforeReflex () {
+    this.benchmark = performance.now()
   }
+
+  afterReflex(element, reflex) {
+     console.log(reflex, `${(performance.now() - this.benchmark).toFixed(0)}ms`)
+  }
+
+
 }
